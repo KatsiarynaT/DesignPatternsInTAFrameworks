@@ -27,7 +27,7 @@ namespace SeleniumWebDriverBasics.Tests.Base
         }
 
         [TearDown]
-        public void CleanUp()
+        public virtual void CleanUp()
         {
             Browser.Driver.Close();
             Browser.Driver.Quit();

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
 using SeleniumWebDriverBasics.WebDriver;
+using SeleniumWebDriverBasics.Decorator;
 
 namespace SeleniumWebDriverBasics.WebObjects.Base
 {
@@ -60,7 +61,7 @@ namespace SeleniumWebDriverBasics.WebObjects.Base
 
         public void WaitForIsVisible()
         {
-            new WebDriverWait(Browser.Driver, TimeSpan.FromSeconds(10)).Until(ExpectedConditions.ElementIsVisible(locator));
+            new WebDriverWait(Browser.Driver, TimeSpan.FromSeconds(30)).Until(ExpectedConditions.ElementIsVisible(locator));
         }
 
         public IWebElement FindElement(By @by)
@@ -75,8 +76,19 @@ namespace SeleniumWebDriverBasics.WebObjects.Base
 
         public void HighlightElement()
         {
-            IJavaScriptExecutor executor = (IJavaScriptExecutor)Browser.Driver;
-            executor.ExecuteScript("arguments[0].style.background='yellow'", GetElement());
+            try
+            {
+                Browser.Driver.FindElement(locator);
+
+                HighlighterBase highlighter= new HighlighterBase();
+                HighlighterDecoratorFrame decoratorFrame = new HighlighterDecoratorFrame(highlighter);
+                decoratorFrame.HighlightElement(this.GetElement());
+            }
+            catch
+            {
+                HighlighterBase highlighter = new HighlighterBase();
+                highlighter.HighlightElement(this.GetElement());
+            }
         }
 
         public void Clear()

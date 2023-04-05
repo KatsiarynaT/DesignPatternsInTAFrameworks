@@ -20,6 +20,7 @@ namespace SeleniumWebDriverBasics.WebObjects.Pages
         public void WaitForComposeLinkIsVisible()
         {
             composeLink.WaitForIsVisible();
+            composeLink.HighlightElement();
         }
 
         public string GetTextFromComposeLink() => composeLink.GetText();
